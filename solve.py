@@ -9,6 +9,7 @@ import re
 
 from nltk.corpus import words
 
+# init dictionary
 dictionary = PyDictionary()
 
 # create set of words
@@ -29,44 +30,46 @@ if len(contains) > 5:
 # tidy up input and convert to list
 letters = list(contains.lower())
 
-# candidates = [word for word in fiveLengthWords if letters in word]
+# iterate through 5 letter words appending words that have all letters in them
 candidates = []
-
 for word in fiveLengthWords:
     if all([letter in word for letter in letters]):
         candidates.append(word)
 
-# print("These are the current candidates:")
-# print(candidates)
 print("\n##############################\n")
 
+# get known positions
 raw_locations = input("What letter positions are known (green) using _ for\
                       unknowns?\n")
 
-if len(raw_locations) > 5:
+# super simple sanity check
+if len(raw_locations) != 5:
     print("You typed: "+raw_locations)
-    print("This is more than 5 characters, try again.")
+    print("There are not 5 characters, try again.")
     raw_locations = input("What letters positions are known in the word using\
                            _ for unknowns?\n")
 
 print("\n##############################\n")
 
-locations = raw_locations.lower().replace("_", ".")
+# lower case input
+locations = raw_locations.lower()
 
-word_regex = locations
+# create regex string from input
+word_regex = locations.replace("_", ".")
 
+# interate through candiate short list using regex find matches to
+# create final results from
 results = []
-
 for word in candidates:
     bingo = re.search(word_regex, word)
     if hasattr(bingo, "group"):
         results.append(bingo.group())
 
+# print final results along with dictionary definitions
 print("Here are the final candidates:")
 for word in results:
     try:
         defin = str(dictionary.meaning(word))
     except:
         defin = "Couldn't find a definition"
-
     print(word+": "+defin+"\n")
