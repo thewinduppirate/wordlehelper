@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Candidates</h2>
+    {% if warning|length > 0 %}
+        <h3>{{warning}}</h3>
+    {% endif %}
+    <ul>
+        {% for result in results %}
+        <li>{{ result }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('main_page') }}">Hone results</a>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="POST">
+    <label for="letters">What letters are known to be in the word?</label>
+    <input type="text" name="letters">
+    <br>
+    <label for="exclude">What letters are known to NOT be in the word?</label>
+    <input type="text" name="exclude">
+    <br>
+    <label for="positions">What letters positions are known (green) to in the word? (Use _ for unknowns: __u__)</label>
+    <input type="text" name="positions">
+    <br>
+    <label for="just_hints">Would you just like the definitions of candidates?</label>
+    <input type="checkbox" name="just_hints">
+    <input type="submit">
+</form>
+{% endblock %}
