@@ -11,8 +11,16 @@
     <label for="positions">What letters positions are known (green) to in the word? (Use _ for unknowns: __u__)</label>
     <input type="text" name="positions">
     <br>
-    <label for="just_hints">Would you just like the definitions of candidates?</label>
-    <input type="checkbox" name="just_hints">
+    <p>Please select what kind of results you would like:</p>
+    <label for="words">Words</label>
+    <input type="radio" id="words" name="result_format" value="Words">
+    <br>
+    <label for="definitions">Definitions</label>
+    <input type="radio" id="definitions" name="result_format" value="Definitions">
+    <br>
+    <label for="both">Both words and definitions</label>
+    <input type="radio" id="both" name="result_format" value="Both">
+    <br>
     <input type="submit">
 </form>
 {% endblock %}

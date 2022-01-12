@@ -10,9 +10,9 @@ from nltk.corpus import words
 # init dictionary
 dictionary = PyDictionary()
 # create set of words
-setOfWords = set(words.words())
+all_words_set = set(words.words())
 # create list of words 5 letters long
-fiveLengthWords = [word for word in setOfWords if len(word) == 5]
+five_len_words = [word for word in all_words_set if len(word) == 5]
 
 app = Flask(__name__)
 
@@ -24,21 +24,39 @@ def main_page():
 
 @app.route("/", methods=["POST"])
 def main_page_post():
+    warning = ""
+
+    # get input from form
     raw_letters = request.form["letters"].lower()
     raw_positions = request.form.get("positions").lower()
+    raw_exclude = request.form.get("exclude").lower()
+    result_format = request.form.get("result_format")
+
+    # Simple sanity check that we have some letters to work with
+    if len(raw_letters) == 0:
+        warning = "We need at least one letter to begin helping."
+        return render_template('results.html',
+                               results=[],
+                               warning=warning)
+
+    # checks position data
     if len(raw_positions) == 0:
+        # assume no input means no knowns
         raw_positions = "_____"
     elif len(raw_positions) != 5:
-        return "Check your character positions"
-    raw_exclude = request.form.get("exclude").lower()
-    just_hints = request.form.get("just_hints")
+        # render a warning if wrong number of positions
+        warning = "Check your character positions"
+        return render_template('results.html',
+                               results=[],
+                               warning=warning)
 
     # convert letters to list
     letters = list(raw_letters)
     exclude = list(raw_exclude)
 
+    # start by creating empty list for words with 0 excluded letters
     not_excluded = []
-    for word in fiveLengthWords:
+    for word in five_len_words:
         if not any([letter in word for letter in exclude]):
             not_excluded.append(word)
 
@@ -60,30 +78,31 @@ def main_page_post():
             results.append(bingo.group())
 
     # create final results list to return to user
-    results_string = []
-    warning = ""
+    results_list = []
 
-    if just_hints:
-        if len(results) > 10:
-            warning = "Skipping definitions as there are a more than 10 potentials."
-        else:
-            count = 1
-            for word in results:
-                try:
-                    defin = str(dictionary.meaning(word))
-                except:
-                    defin = "{Couldn't find a definition.}"
+    # cheat and change result format depending on number of results
+    if len(results) > 5:
+        warning = "Skipping definitions as there are a more than 5 potentials."
+        warning += " ("+str(len(results))+")"
+        result_format = "Words"
 
-                if defin == "None":
-                    defin = "{Couldn't find a definition.}"
-
-                results_string.append("#"+str(count)+": "+defin)
-                count += 1
-
-    elif len(results) > 5:
-        warning = "Skipping definitions as there are more than 5 potentials."
+    if result_format == "Words":
         for word in results:
-            results_string.append(word)
+            results_list.append(word)
+
+    elif result_format == "Definitions":
+        count = 1
+        for word in results:
+            try:
+                defin = str(dictionary.meaning(word))
+            except:
+                defin = "{Couldn't find a definition.}"
+
+            if defin == "None":
+                defin = "{Couldn't find a definition.}"
+
+            results_list.append("#"+str(count)+": "+defin)
+            count += 1
 
     else:
         for word in results:
@@ -95,8 +114,8 @@ def main_page_post():
             if defin == "None":
                 defin = "{Couldn't find a definition.}"
 
-            results_string.append(word+": "+defin)
+            results_list.append(word+": "+defin)
 
     return render_template('results.html',
-                           results=results_string,
+                           results=results_list,
                            warning=warning)
