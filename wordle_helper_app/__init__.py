@@ -100,8 +100,8 @@ def main_page_post():
     results_list = []
 
     # cheat and change result format depending on number of results
-    if len(results) > 5:
-        warning = "Skipping definitions as there are a more than 5 potentials."
+    if len(results) > 10:
+        warning = "Skipping definitions as there are a more than 10 potentials."
         warning += " ("+str(len(results))+")"
         result_format = "Words"
 
