@@ -23,8 +23,12 @@ CORS(app, **cors_options)
 # init dictionary
 dictionary = PyDictionary()
 
+# download ntlk corpus of words
+nltk_path = './nltk-data'
+nltk.data.path.append(nltk_path)
+nltk.download('words', download_dir=nltk_path)
+
 # create set of words
-nltk.download('words', download_dir='./nltk-data')
 words = nltk.corpus.words
 all_words_set = set(words.words())
 
