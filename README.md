@@ -16,5 +16,5 @@ cd /path
 python3.8 -m venv venv
 . venv/bin/activate
 pip install -r requirements.txt
-
-
+cp ./nginx.conf /etc/nginx/sites-available/wordlehelper.conf
+cp ./supervisor.con /etc/supervisor.d/wordlehelper.conf
