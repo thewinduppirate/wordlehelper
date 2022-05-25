@@ -11,6 +11,7 @@ Super quick app to help give hints for Wordle puzzles.
 
 ## Installation
 
+```bash
 git clone ... /path
 cd /path
 python3.8 -m venv venv
@@ -18,3 +19,4 @@ python3.8 -m venv venv
 pip install -r requirements.txt
 cp ./nginx.conf /etc/nginx/sites-available/wordlehelper.conf
 cp ./supervisor.con /etc/supervisor.d/wordlehelper.conf
+```
